@@ -59,19 +59,17 @@ func (s Spaceship) DrawCreature() {
 }
 
 func (s *Spaceship) MoveSpaceshipWithAngle(forward, right float32) {
-	rad := float64(s.Angle) * (math.Pi / 180) // Convert angle to radians
+	rad := float64(s.Angle) * (math.Pi / 180) // Convert to radians
 
 	// Forward movement direction
-	forwardVec := rl.NewVector2(float32(math.Cos(rad)), float32(math.Sin(rad)))
+	forwardVec := rl.NewVector2(float32(math.Sin(rad)), -float32(math.Cos(rad)))
 
 	// Right movement direction (perpendicular to forward)
-	rightVec := rl.NewVector2(-forwardVec.Y, forwardVec.X)
+	radRight := float64(s.Angle+90) * (math.Pi / 180)
+	rightVec := rl.NewVector2(float32(math.Sin(radRight)), float32(math.Cos(radRight)))
 
 	// Calculate movement using forward and right inputs
-	movement := rl.Vector2Add(
-		rl.Vector2Scale(forwardVec, forward*s.Speed*rl.GetFrameTime()),
-		rl.Vector2Scale(rightVec, right*s.Speed*rl.GetFrameTime()),
-	)
+	movement := rl.Vector2Add(rl.Vector2Scale(forwardVec, forward*s.Speed*rl.GetFrameTime()), rl.Vector2Scale(rightVec, right*s.Speed*rl.GetFrameTime()))
 
 	// Apply movement to spaceship
 	s.Pos = rl.Vector2Add(s.Pos, movement)
